@@ -13,7 +13,7 @@ container="$1-dev-1"
 shift
 
 # sore or restore ports
-cd "$HOME/projects/$project/container/cache"
+cd "$HOME/projects/$project/dev/cache"
 if [ "$#" -eq 0 ]; then
     if [ ! -f "./ports" ]; then
         echo "No ports provided and no previous port mappings found for $project."

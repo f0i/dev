@@ -13,4 +13,4 @@ RUN /setup/bash.sh
 #RUN /setup/icp.sh
 #RUN /setup/rust.sh
 
-CMD [ "sleep", "20000" ]
+CMD [ "sleep", "infinity" ]

@@ -38,6 +38,7 @@ if [[ -z "$project" ]]; then
 fi
 
 if [[ -z "$project" ]]; then
+
 		# no project given, no project guessed
 		echo "Couldn't detect project, please provide a project name"
 		exit 1
@@ -61,26 +62,36 @@ fi
 # check if project exists in ~/projects
 if [[ ! -d "${HOME}/projects/${project}" ]]; then
 	echo "Project ${project} not found in ~/projects"
-	exit 1
+	if [[ "$command" == "init" ]]; then
+		echo "Create ${HOME}/projects/${project}/ ?"
+		echo -n "Press any key to continue or Ctrl-C to cancel"
+		read -n 1 -s
+		mkdir "${HOME}/projects/${project}/"
+	else
+		exit 5
+	fi
 fi
 
 # check if project has a container directory
-if [[ ! -d "${HOME}/projects/${project}/container" ]]; then
-	echo "Project ${project} has no container directory"
-else
+if [[ ! -d "${HOME}/projects/${project}/dev" ]]; then
+	echo "Project ${project} has no ./dev/ directory"
 	# check if command is init
 	if [[ "$command" == "init" ]]; then
 		# confirm init
-	        echo "Init project $project"
-		echo "This will clone the container repository into $HOME/projects/$project/container"
+		cd "${HOME}/projects/${project}"
+		echo "Init project ${project} in $(pwd)"
+		echo "This will clone the github.com/f0i/dev repository into ${HOME}/projects/${project}/dev"
 		echo -n "Press any key to continue or Ctrl-C to cancel"
 		read -n 1 -s
 		echo
-		git clone https://github.com/f0i/container
-		cd container
+		git clone https://github.com/f0i/dev
+		cd dev
 		git submodule init
 		git submodule update
+		nvim Dockerfile
 		exit 0
+	else
+		exit 6
 	fi
 
 fi
@@ -89,7 +100,7 @@ fi
 echo "${project}" > /tmp/dev.last.project
 
 # change to project directory
-cd "${HOME}/projects/${project}/container"
+cd "${HOME}/projects/${project}/dev"
 
 container="$project-dev-1"
 
@@ -101,18 +112,18 @@ help ()
 	echo "$0 [<project>] [<command> [args...]]"
 	echo ""
 	echo "<project>: name of a project, located in ~/projects/<project>."
-	echo "           Must contain a subdirectory called ./container (see https://github.com/f0i/container)"
+	echo "           Must contain a subdirectory called ./dev (see https://github.com/f0i/dev)"
 	echo "           If no project is given, the last used project will be used."
 	echo ""
 	echo "<command>: one of the following commands:"
-	echo "  help: show this help"
-	echo "  ports: set port mappings"
-	echo "  start stop up build: docker-compose commands"
+	echo "  help (h): show this help"
+	echo "  ports (p): set port mappings"
+	echo "  start (s) stop up (u) build (b): docker-compose commands"
 	echo "  run: run a command inside the container"
 	echo "  bash (default): start a bash shell inside the container"
-	echo "  init: add ./container to an existing project"
-	echo "  upgrade: update the container repository"
-	echo "  h p s u b r: shortcuts for help ports start up build run"
+	echo "  local: start a bash shell on the host inside the project directory"
+	echo "  init: add ./dev/ to an existing project"
+	echo "  upgrade: pull the latest changes from github.com/f0i/dev repository"
 }
 
 # execute command
@@ -147,8 +158,6 @@ case "$command" in
 		;;
 	"init")
 		# already handeld above if needed
-		echo "Project $project already initialized"
-		echo "Use $0 upgrade to update the container repository"
 		exit 3
 		;;
 	"upgrade")
