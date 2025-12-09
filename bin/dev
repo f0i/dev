@@ -2,6 +2,20 @@
 
 set -eu -o pipefail
 
+## Ask a yes/no question
+ask() {
+	while true; do
+		echo -n "$@ [Y,n] "
+		read yn
+		case "$yn" in
+			[Yy]* ) return 0;;
+			""    ) return 0;;
+			[Nn]* ) return 1;;
+			* ) echo "Please answer yes or no.";;
+		esac
+	done
+}
+
 ## list of subcommands
 subcommands=("help" "init" "upgrade" "ports" "start" "stop" "up" "build" "run" "bash" "local" "h" "p" "s" "u" "b" "r")
 
@@ -62,37 +76,58 @@ fi
 # check if project exists in ~/projects
 if [[ ! -d "${HOME}/projects/${project}" ]]; then
 	echo "Project ${project} not found in ~/projects"
-	if [[ "$command" == "init" ]]; then
-		echo "Create ${HOME}/projects/${project}/ ?"
-		echo -n "Press any key to continue or Ctrl-C to cancel"
-		read -n 1 -s
-		mkdir "${HOME}/projects/${project}/"
-	else
-		exit 5
-	fi
+	[[ "$command" == "init" ]] || exit 5
+	ask "Create ${HOME}/projects/${project}/ ?" || exit 5
+	mkdir "${HOME}/projects/${project}/"
 fi
 
 # check if project has a container directory
 if [[ ! -d "${HOME}/projects/${project}/dev" ]]; then
 	echo "Project ${project} has no ./dev/ directory"
-	# check if command is init
-	if [[ "$command" == "init" ]]; then
-		# confirm init
-		cd "${HOME}/projects/${project}"
-		echo "Init project ${project} in $(pwd)"
-		echo "This will clone the github.com/f0i/dev repository into ${HOME}/projects/${project}/dev"
-		echo -n "Press any key to continue or Ctrl-C to cancel"
-		read -n 1 -s
-		echo
-		git clone https://github.com/f0i/dev
-		cd dev
-		git submodule init
-		git submodule update
-		nvim Dockerfile
-		exit 0
+	[[ "$command" == "init" ]] || exit 6
+
+	# initialize the project
+	cd "${HOME}/projects/${project}"
+	echo "Init project ${project} in $(pwd)"
+	ask "Clone the github.com/f0i/dev repository into ${HOME}/projects/${project}/dev" || exit 0
+
+	git clone https://github.com/f0i/dev
+	cd dev
+	git submodule init
+	git submodule update
+
+	# copy user configuration
+	if ask "Copy your SSH public key and .gitconfig?"; then
+		# copy SSH key
+		if [ -f ~/.ssh/id_ed25519.pub ]; then
+			cp ~/.ssh/id_ed25519.pub setup/user/key.pub
+			echo "Copied SSH key from ~/.ssh/id_ed25519.pub"
+		elif [ -f ~/.ssh/id_rsa.pub ]; then
+			cp ~/.ssh/id_rsa.pub setup/user/key.pub
+			echo "Copied SSH key from ~/.ssh/id_rsa.pub"
+		else
+			echo "Warning: No SSH key found at ~/.ssh/id_ed25519.pub or ~/.ssh/id_rsa.pub"
+		fi
+
+		# copy gitconfig
+		if [ -f ~/.gitconfig ]; then
+			cp ~/.gitconfig setup/user/gitconfig
+			echo "Copied .gitconfig"
+		else
+			echo "Warning: No git config found at ~/.gitconfig"
+		fi
 	else
-		exit 6
+		echo ""
+		echo "Skipped copying personal configuration."
+		echo "To enable port forwarding, add your SSH public key to: setup/user/key.pub"
+		echo "To configure git, edit: setup/user/gitconfig"
+		echo ""
+		echo "Note: Without an SSH key, the 'dev ports' command will not work."
+		echo ""
 	fi
+
+	nvim Dockerfile
+	exit 0
 
 fi
 
@@ -132,7 +167,7 @@ case "$command" in
 		help
 		;;
 	"p"|"ports")
-		bin/ports "$project" "$@"
+		./bin/ports "$project" "$@"
 		;;
 	"s"|"start")
 		docker-compose -p "$project" up -d

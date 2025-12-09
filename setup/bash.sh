@@ -7,5 +7,5 @@ echo 'export LC_ALL=C.UTF-8' >>~/.bashrc
 echo '. /etc/bash_completion' >>~/.bashrc
 echo 'export EDITOR=nvim' >>~/.bashrc
 
-cp '/setup/.gitconfig' '/home/node/.gitconfig'
+cp '/setup/user/gitconfig' '/home/node/.gitconfig'
 
