@@ -39,6 +39,14 @@ sshArgs=""
 for portMapping in "$@"; do
 	portContainer=${portMapping#*:}
 	portHost=${portMapping%%:*}
+
+	# validate port numbers
+	if [[ ! "$portHost" =~ ^[0-9]+$ ]] || [[ ! "$portContainer" =~ ^[0-9]+$ ]]; then
+		echo "Invalid port mapping: $portMapping"
+		echo "Format: <host_port>[:<container_port>]"
+		exit 3
+	fi
+
 	sshArgs+=" -L $portHost:localhost:$portContainer"
 done
 

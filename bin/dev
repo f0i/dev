@@ -19,6 +19,10 @@ ask() {
 ## list of subcommands
 subcommands=("help" "init" "upgrade" "ports" "start" "stop" "up" "build" "run" "bash" "local" "h" "p" "s" "u" "b" "r")
 
+## state directory for persistent data
+STATE_DIR="$HOME/.local/state/dev"
+mkdir -p "$STATE_DIR"
+
 project=""
 command="bash"
 
@@ -44,19 +48,19 @@ fi
 
 # check if project is set
 if [[ -z "$project" ]]; then
-	# no project given
-	# check if /tmp/dev.last.project exists
-	if [[ -f /tmp/dev.last.project ]]; then
-		project=$(cat /tmp/dev.last.project)
+	# no project given, try to restore last project
+	if [[ -f "$STATE_DIR/last.project" ]]; then
+		project=$(cat "$STATE_DIR/last.project")
 	fi
 fi
 
+# validate project name
 if [[ -z "$project" ]]; then
-
-		# no project given, no project guessed
-		echo "Couldn't detect project, please provide a project name"
-		exit 1
-	
+	echo "Couldn't detect project, please provide a project name"
+	exit 1
+elif [[ ! "$project" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+	echo "Invalid project name '$project'. Only letters, numbers, underscores, and hyphens allowed."
+	exit 7
 fi
 
 # check command
@@ -117,13 +121,10 @@ if [[ ! -d "${HOME}/projects/${project}/dev" ]]; then
 			echo "Warning: No git config found at ~/.gitconfig"
 		fi
 	else
-		echo ""
 		echo "Skipped copying personal configuration."
 		echo "To enable port forwarding, add your SSH public key to: setup/user/key.pub"
 		echo "To configure git, edit: setup/user/gitconfig"
-		echo ""
 		echo "Note: Without an SSH key, the 'dev ports' command will not work."
-		echo ""
 	fi
 
 	nvim Dockerfile
@@ -132,7 +133,7 @@ if [[ ! -d "${HOME}/projects/${project}/dev" ]]; then
 fi
 
 # save project name
-echo "${project}" > /tmp/dev.last.project
+echo "${project}" > "$STATE_DIR/last.project"
 
 # change to project directory
 cd "${HOME}/projects/${project}/dev"
