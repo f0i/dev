@@ -5,6 +5,11 @@ services:
       - type: bind
         source: ../
         target: /workspace
+        read_only: false
+      - type: bind
+        source: ../dev
+        target: /workspace/dev
+        read_only: true
       - type: bind
         source: ./setup
         target: /setup
