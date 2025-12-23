@@ -11,7 +11,7 @@ RUN /setup/bash.sh
 RUN /setup/agent.sh
 #RUN USER=node /setup/docker.sh
 #RUN /setup/php.sh
-#RUN /setup/icp.sh
+RUN /setup/icp.sh
 #RUN /setup/rust.sh
 
 CMD [ "sleep", "infinity" ]
