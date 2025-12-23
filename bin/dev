@@ -129,6 +129,9 @@ if [[ ! -d "${HOME}/projects/${project}/dev" ]]; then
 	nvim_repo=$([ -d ~/.config/nvim/.git ] && git -C ~/.config/nvim remote get-url origin 2>/dev/null || echo "https://github.com/f0i/nvim-config")
 	if ask "Clone nvim config from $nvim_repo?"; then
 		git clone "$nvim_repo" nvim || exit 8
+	else
+		echo "Skipped nvim configuration."
+		echo "Copy your configuration into ./nvim/ (e.g. git clone https://github.com/nvim-lua/kickstart.nvim nvim)"
 	fi
 
 	nvim Dockerfile
@@ -203,7 +206,7 @@ case "$command" in
 	"upgrade")
 		# git pull and update submodules
 		git pull
-		git submodule update --init --recursive
+		(cd nvim && git pull)
 		;;
 	*)
 		echo "Invalid command: $command"; 
