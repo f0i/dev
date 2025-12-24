@@ -1,10 +1,22 @@
-# Let Me Know license
+MIT License
 
-This software is provided "as is", without any warranty. You are free to use, modify and distribute it under the following terms:
+Copyright (c) 2024 f0i
 
-- create an [issue in this repository](https://github.com/f0i/container/issues/new)
-- or post on [X and tag @f0i](https://x.com/intent/post?text=I%27m+building+something+cool+on+top+of+%40f0i%27s+container&url=https%3A%2F%2Fgithub.com%2Ff0i%2Fcontainer).
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-After you have done that, you are free to use the code in any way you like.
-You can even remove the license notice if you want to.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
