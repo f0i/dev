@@ -1,6 +1,17 @@
 # Dev Container
 
-Something similar to [Development Containers](https://containers.dev/) built with docker-compose and a few simple bash scripts.
+Safe, isolated development environments for trying out projects without risking your machine.
+
+**Key features:**
+- Runs each project in an isolated Docker container
+- CLI-based development: nvim, AI agents, etc.
+- Transparent port forwarding: access apps in your browser as if they were running on the host
+- Scripts are easy to audit: less than 300 lines of bash running on the host
+- Minimal dependencies: docker, docker-compose, git, bash, ssh
+
+As a side effect, you get clean, reproducible, and easy-to-reset development environments.
+
+No more `npm install` on your host, no AI agents reading your files — safely experiment with any project.
 
 ## Install
 
@@ -34,15 +45,14 @@ During `dev init`, the nvim configuration is cloned into `./dev/nvim` and mounte
 - Or you can manually clone any nvim config repo to `./dev/nvim` before building
 - Or skip the nvim setup during init and add it later
 
-## Comparison to Development Containers
+## How it works
 
-- Less dependencies: Only docker, docker-compose, git, bash and ssh
-- Easier to understand what is going on:
-  - Main script is `bin/dev`: ~200 lines of bash, mostly if/else and case statements, no loops
-  - Port forwarding in `bin/ports`: ~50 lines of bash, starting a ssh tunnel with `ssh -L ...`
-  - Docker-compose file: ~20 lines of yaml, defining services and volumes
-  - Dockerfile: ~15 lines, defining the base image and define which tools to install by default
-  - Setup scripts called from Dockerfile or run manually in `setup/`: ~5-30 lines of bash each
+Simple, transparent scripts you can easily audit:
+- Main script `bin/dev`: ~200 lines of bash, mostly if/else and case statements, no loops
+- Port forwarding `bin/ports`: ~50 lines of bash, starting a ssh tunnel with `ssh -L ...`
+- Docker-compose file: ~20 lines of yaml, defining services and volumes
+- Dockerfile: ~15 lines, defining the base image and which tools to install by default
+- Setup scripts in `setup/`: ~5-30 lines of bash each
 
 You are supposed to modify the Dockerfile and setup scripts to fit your needs.
 
