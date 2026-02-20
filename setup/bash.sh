@@ -9,3 +9,6 @@ echo 'export EDITOR=nvim' >>~/.bashrc
 
 cp '/setup/user/gitconfig' '/home/node/.gitconfig'
 
+# fix permissions
+sudo chown node:node /home/node/.local
+sudo chown node:node /home/node/.local/share
