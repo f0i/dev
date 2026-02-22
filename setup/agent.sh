@@ -2,7 +2,7 @@
 
 set -eu -o pipefail
 
-npm install -g @anthropic-ai/claude-code
+curl -fsSL https://claude.ai/install.sh | bash
 
 curl -fsSL https://opencode.ai/install | bash
 
