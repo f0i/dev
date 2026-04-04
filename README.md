@@ -11,13 +11,22 @@ Safe, isolated development environments for trying out projects without risking 
 
 As a side effect, you get clean, reproducible, and easy-to-reset development environments.
 
-No more `npm install` on your host, no AI agents reading your files — safely experiment with any project.
+No more `npm install` on your host, no AI agents reading your files.
+Safely experiment with any project.
 
 ## Install
 
 Requires docker, docker-compose and some basic tools like git, bash and ssh.
 
 The command `bin/dev` should be somewhere in your PATH.
+
+```
+mkdir -p ~/bin
+wget https://raw.githubusercontent.com/f0i/dev/refs/heads/main/bin/dev -O ~/bin/dev
+echo "export PATH=\"$PATH:$HOME/bin\" >> ~/.bashrc"
+```
+
+All other files will be added per project as needed:
 
 1. Assuming a project called `arena` in `~/projects/arena`
 2. Clone this repo into the project root `dev arena init`
@@ -55,8 +64,10 @@ Simple, transparent scripts you can easily audit:
 - Setup scripts in `setup/`: ~5-30 lines of bash each
 
 You are supposed to modify the Dockerfile and setup scripts to fit your needs.
+The docker-compose file can also be used to include additional services or enable permanent port farwarding.
 
 ## License
 
-MIT License - see [LICENSE.md](LICENSE.md) for details.
+MIT License.
+See [LICENSE.md](LICENSE.md) for details.
 
