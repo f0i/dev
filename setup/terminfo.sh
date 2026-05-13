@@ -7,7 +7,10 @@ set -eu -o pipefail
 # kitty-terminfo  → xterm-kitty  (Kitty)
 # ncurses-term    → wezterm      (WezTerm)
 #                 → alacritty    (Alacritty)
-#                 → ghostty      (Ghostty — covers TERM=ghostty;
-#                                 xterm-ghostty has no apt package yet)
+#                 → ghostty      (Ghostty — covers TERM=ghostty)
+# foot-terminfo   → foot         (foot)
+#
+# TODO: xterm-ghostty — Ghostty sets TERM=xterm-ghostty but no apt package exists yet.
+#       Once available: apt-get install -y ghostty-terminfo
 
-sudo apt-get install -y --no-install-recommends kitty-terminfo ncurses-term
+sudo apt-get install -y --no-install-recommends kitty-terminfo ncurses-term foot-terminfo
