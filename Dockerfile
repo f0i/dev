@@ -13,6 +13,7 @@ RUN /setup/agent.sh
 #RUN /setup/icp.sh
 #RUN /setup/rust.sh
 RUN /setup/tmux.sh
+RUN /setup/terminfo.sh
 RUN /setup/runit.sh
 
 #CMD [ "sleep", "infinity" ]
