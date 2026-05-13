@@ -190,10 +190,10 @@ case "$command" in
 		docker-compose -p "$project" build
 		;;
 	"run"|"r")
-		docker exec -itu node -w /workspace -e "TERM=${TERM:-xterm-256color}" -e "COLORTERM=${COLORTERM:-}" "$container" "$@"
+		docker exec -itu node -w /workspace -e TERM -e COLORTERM "$container" "$@"
 		;;
 	"bash")
-		docker exec -itu node -w /workspace -e "TERM=${TERM:-xterm-256color}" -e "COLORTERM=${COLORTERM:-}" "$container" bash
+		docker exec -itu node -w /workspace -e TERM -e COLORTERM "$container" bash
 		;;
 	"local")
 		cd ..
