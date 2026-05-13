@@ -14,7 +14,6 @@ RUN /setup/agent.sh
 #RUN /setup/rust.sh
 RUN /setup/tmux.sh
 RUN /setup/terminfo.sh
-RUN /setup/runit.sh
 
 #CMD [ "sleep", "infinity" ]
 ENTRYPOINT ["/bin/bash", "-c", "if [ -f /workspace/init.sh ]; then /workspace/init.sh; else sleep infinity; fi"]
