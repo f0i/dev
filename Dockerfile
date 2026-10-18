@@ -16,6 +16,12 @@ USER node
 # shells, which the entrypoint is not.
 ENV PATH=/home/node/.local/bin:$PATH
 
+# The tools layers cache forever: a rebuild never re-runs the installers, so
+# claude/opencode/gemini stay at whatever version the first build fetched
+# (Martin, 2026-10-18: "opencode installer is not updated"). Rebuild with
+# --build-arg TOOLS_BUST=$(date +%F) to refresh them all in one go.
+ARG TOOLS_BUST=1
+
 RUN /setup/updates.sh
 RUN USER=node /setup/sshd.sh
 RUN /setup/tmux.sh
